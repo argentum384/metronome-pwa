@@ -21,16 +21,8 @@ body > * {
 	background-color: white;
 }
 
-#inputBpm[disabled] {
-	color: gray;
-}
-
 button {
 	color: white;
-}
-
-button[disabled] {
-	color: gray;
 }
 
 #btnStartOrStop {

@@ -13,7 +13,7 @@ var Metronome = Metronome || class {
 			this.bpm = bpm;
 		}
 		this.audioCtx.resume();
-		this.scheduleClick();
+		this.schedule();
 		this.playing = true;
 		console.log("start");
 		return true;
@@ -32,7 +32,28 @@ var Metronome = Metronome || class {
 		console.log("stop");
 	}
 
-	scheduleClick() {
+	changeBpm(bpm) {
+		if (bpm === this.bpm || bpm < Metronome.MIN_BPM || bpm > Metronome.MAX_BPM) {
+			return;
+		}
+		this.bpm = bpm;
+
+		if (this.playing) {
+			if (this.tID) {
+				clearTimeout(this.tID);
+				this.tID = null;
+			}
+			if (this.gainNode) {
+				this.gainNode.disconnect();
+				this.gainNode = null;
+			}
+			const elapsed = (performance.now() - this.lastScheduled) / 1000.0;
+			const interval = 60.0 / this.bpm;
+			this.schedule(Math.max(interval - ((elapsed + interval) % interval), 0.0));
+		}
+	}
+
+	schedule(wait) {
 		if (this.tID) {
 			clearTimeout(this.tID);
 			this.tID = null;
@@ -47,18 +68,20 @@ var Metronome = Metronome || class {
 		this.gainNode.gain.value = Metronome.GAIN;
 		this.gainNode.connect(audioCtx.destination);
 
+		wait = wait >= 0.0 ? wait : 0.0;
 		for (let n = 0; n < Metronome.SCHEDULE_TIMES; n++) {
 			const oscNode = audioCtx.createOscillator();
 			oscNode.type = Metronome.CLICK_WAVE_TYPE;
 			oscNode.frequency.value = Metronome.CLICK_FREQ;
 			oscNode.connect(this.gainNode);
 			const startInterval = n * (60.0 / this.bpm);
-			oscNode.start(audioCtx.currentTime + startInterval);
-			oscNode.stop(audioCtx.currentTime + startInterval + Metronome.CLICK_LEN_SEC);
+			oscNode.start(wait + audioCtx.currentTime + startInterval);
+			oscNode.stop(wait + audioCtx.currentTime + startInterval + Metronome.CLICK_LEN_SEC);
 		}
-		this.tID = setTimeout(this.scheduleClick.bind(this),
-				Math.round(Metronome.SCHEDULE_TIMES * (60.0 / this.bpm) * 1000.0));
-		console.log("scheduleClick");
+		this.tID = setTimeout(this.schedule.bind(this),
+				Math.round((wait + Metronome.SCHEDULE_TIMES * (60.0 / this.bpm)) * 1000.0));
+		this.lastScheduled = wait * 1000.0 + performance.now();
+		console.log("schedule");
 	}
 };
 

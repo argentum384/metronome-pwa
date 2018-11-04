@@ -18,18 +18,19 @@ document.addEventListener("DOMContentLoaded", () => {
 		inputBpm.value = bpmStorage;
 	}
 
+	const saveBpm = function (bpm) {
+		localStorage.setItem("bpm", bpm);
+	}
+
 	const startOrStop = function () {
 		if (metronome.playing) {
-			[inputBpm, btnUp10, btnUp1, btnDown1, btnDown10].forEach(x => x.disabled = false);
 			btnStartOrStop.textContent = "START";
 			metronome.stop();
 		} else {
 			const bpm = parseInt(inputBpm.value);
-			if (bpm < Metronome.MIN_BPM || bpm > Metronome.MAX_BPM) {
+			if (!bpm || bpm < Metronome.MIN_BPM || bpm > Metronome.MAX_BPM) {
 				return;
 			}
-			localStorage.setItem("bpm", bpm);
-			[inputBpm, btnUp10, btnUp1, btnDown1, btnDown10].forEach(x => x.disabled = true);
 			btnStartOrStop.textContent = "STOP";
 			metronome.start(bpm);
 		}
@@ -41,17 +42,19 @@ document.addEventListener("DOMContentLoaded", () => {
 			e.preventDefault();
 		}
 	});
-	
+
 	const addBpm = function (diff) {
 		const curBpm = parseInt(inputBpm.value);
 		if (curBpm == null) {
 			return;
 		}
-		const afterBpm = curBpm + diff;
-		if (afterBpm < Metronome.MIN_BPM || afterBpm > Metronome.MAX_BPM) {
+		const bpm = curBpm + diff;
+		if (!bpm || bpm < Metronome.MIN_BPM || bpm > Metronome.MAX_BPM) {
 			return;
 		}
-		inputBpm.value = afterBpm;
+		inputBpm.value = bpm;
+		metronome.changeBpm(bpm);
+		saveBpm(bpm);
 	};
 	addClickEventListener(btnUp10, addBpm.bind(null, 10));
 	addClickEventListener(btnUp1, addBpm.bind(null, 1));
@@ -64,6 +67,20 @@ document.addEventListener("DOMContentLoaded", () => {
 		}
 	});
 
+	let oldBpm = inputBpm.value;
+	inputBpm.addEventListener("input", e => {
+		if (inputBpm.value.length > 3) {
+			inputBpm.value = inputBpm.value.slice(0, 3);
+		}
+		if (inputBpm.value.length === 0 || inputBpm.value <= 0) {
+			inputBpm.value = oldBpm;
+		} else {
+			oldBpm = inputBpm.value;
+			metronome.changeBpm(inputBpm.value);
+			saveBpm(inputBpm.value);
+		}
+	});
+
 	window.addEventListener("keydown", e => {
 		if (!e.keyCode) {
 			return;
@@ -73,14 +90,10 @@ document.addEventListener("DOMContentLoaded", () => {
 				startOrStop();
 				break;
 			case 38:
-				if (!metronome.playing) {
-					e.shiftKey ? addBpm(10) : addBpm(1);
-				}
+				e.shiftKey ? addBpm(10) : addBpm(1);
 				break;
 			case 40:
-				if (!metronome.playing) {
-					e.shiftKey ? addBpm(-10) : addBpm(-1);
-				}
+				e.shiftKey ? addBpm(-10) : addBpm(-1);
 				break;
 		}
 	});
