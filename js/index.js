@@ -93,3 +93,11 @@ document.addEventListener("DOMContentLoaded", () => {
 		divHelp.style.display = "none";
 	});
 });
+
+if (navigator.serviceWorker) {
+	navigator.serviceWorker.register("service-worker.js").then(registration => {
+		console.log("ServiceWorker registration successful with scope: ", registration.scope);
+	}).catch(err => {
+		console.log("ServiceWorker registration failed", err);
+	});
+}
