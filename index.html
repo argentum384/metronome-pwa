@@ -1,55 +1,46 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-		<title>Metronome (PWA Test)</title>
-		<link rel="stylesheet" href="css/index.css">
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata">
-		<link rel="icon" href="favicon.ico">
-		<link rel="manifest" href="manifest.json">
-		<link rel="apple-touch-icon" href="icon.png" sizes="192x192"/>
-		<script src="js/metronome.js"></script>
-		<script src="js/index.js"></script>
-	</head>
-	<body>
-		<input
-				id="inputBpm"
-				type="number"
-				value="120"
-				autocomplete="off"
-				min="1"
-				max="999"
-				step="1">
-		<button id="btnUp10">+10</button>
-		<button id="btnUp1">+1</button>
-		<button id="btnDown1">-1</button>
-		<button id="btnDown10">-10</button>
-		<button id="btnStartOrStop">START</button>
-		<div id="divHelp">
-			<b>Keyboard Shortcuts</b><br>
-			<table cellspacing="0">
-				<tr>
-					<td>Space</td>
-					<td>Start / Stop</td>
-				</tr>
-				<tr>
-					<td>Up</td>
-					<td>BPM +1</td>
-				</tr>
-				<tr>
-					<td>Down</td>
-					<td>BPM -1</td>
-				</tr>
-				<tr>
-					<td>Shift + Up</td>
-					<td>BPM +10</td>
-				</tr>
-				<tr>
-					<td>Shift + Down</td>
-					<td>BPM -10</td>
-				</tr>
-			</table>
-		</div>
-		<div id="divShowHelp">[?]</div>
-	</body>
-</html>
+
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>Metronome (PWA Test)</title>
+<link rel="stylesheet" href="css/index.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata">
+<link rel="icon" href="favicon.ico">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.png" sizes="192x192"/>
+<script src="js/metronome.js"></script>
+<script src="js/index.js"></script>
+
+<input
+		id="inputBpm"
+		type="number"
+		value="120"
+		autocomplete="off"
+		min="1"
+		max="999"
+		step="1">
+<button id="btnUp10">+10</button>
+<button id="btnUp1">+1</button>
+<button id="btnDown1">-1</button>
+<button id="btnDown10">-10</button>
+<button id="btnStartOrStop">START</button>
+<div id="divHelp">
+	<b>Keyboard Shortcuts</b><br>
+	<table cellspacing="0">
+		<tr>
+			<td>Space
+			<td>Start / Stop
+		<tr>
+			<td>Up
+			<td>BPM +1
+		<tr>
+			<td>Down
+			<td>BPM -1
+		<tr>
+			<td>Shift + Up
+			<td>BPM +10
+		<tr>
+			<td>Shift + Down
+			<td>BPM -10
+	</table>
+</div>
+<div id="divShowHelp">[?]</div>

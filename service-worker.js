@@ -3,7 +3,7 @@
 // キャッシュファイルの指定
 var CACHE_NAME = "metronome-pwa-caches";
 var urlsToCache = [
-	"/carborane3.github.io/",
+	"argentum384.github.io/",
 ];
 
 // インストール処理
